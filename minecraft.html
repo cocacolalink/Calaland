@@ -1,0 +1,629 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Calaland | Minecraft</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Poppins:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            min-height: 100vh;
+            font-family: "Poppins", sans-serif;
+            color: white;
+            background: #080b08;
+            overflow-x: hidden;
+        }
+
+        /* =========================
+           MINECRAFTI TAUST
+        ========================= */
+
+        .minecraft-background {
+            position: fixed;
+            inset: 0;
+
+            background-image:
+                linear-gradient(
+                    rgba(5, 10, 6, 0.62),
+                    rgba(12, 2, 4, 0.86)
+                ),
+                url("./minecraft-bg.jpg");
+
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+
+            filter: blur(3px);
+
+            transform: scale(1.04);
+
+            z-index: -3;
+        }
+
+        .red-overlay {
+            position: fixed;
+            inset: 0;
+
+            background:
+                radial-gradient(
+                    circle at center,
+                    rgba(255, 35, 35, 0.15),
+                    transparent 48%
+                );
+
+            z-index: -2;
+        }
+
+        .dark-overlay {
+            position: fixed;
+            inset: 0;
+
+            background:
+                linear-gradient(
+                    180deg,
+                    rgba(0, 0, 0, 0.10),
+                    rgba(0, 0, 0, 0.55)
+                );
+
+            z-index: -1;
+        }
+
+
+        /* =========================
+           NAVIGATSIOON
+        ========================= */
+
+        .navbar {
+            position: fixed;
+
+            top: 18px;
+            left: 50%;
+
+            transform: translateX(-50%);
+
+            width: min(1150px, calc(100% - 30px));
+
+            padding: 12px 18px;
+
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            gap: 20px;
+
+            background: rgba(10, 12, 10, 0.72);
+
+            border: 1px solid rgba(255, 70, 70, 0.28);
+
+            border-radius: 18px;
+
+            backdrop-filter: blur(18px);
+
+            box-shadow:
+                0 0 30px rgba(255, 30, 30, 0.12);
+
+            z-index: 20;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+
+            gap: 10px;
+
+            text-decoration: none;
+            color: white;
+
+            font-family: "Orbitron", sans-serif;
+
+            font-weight: 800;
+
+            letter-spacing: 1px;
+        }
+
+        .brand img {
+            width: 42px;
+            height: 42px;
+
+            object-fit: cover;
+
+            border-radius: 11px;
+
+            box-shadow:
+                0 0 18px rgba(255, 35, 35, 0.55);
+        }
+
+        .nav-links {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+
+            flex-wrap: wrap;
+            justify-content: flex-end;
+        }
+
+        .nav-links a {
+            color: rgba(255,255,255,0.78);
+
+            text-decoration: none;
+
+            font-size: 13px;
+            font-weight: 600;
+
+            padding: 9px 12px;
+
+            border-radius: 10px;
+
+            transition: 0.25s ease;
+        }
+
+        .nav-links a:hover,
+        .nav-links .active {
+            color: white;
+
+            background: rgba(255, 40, 40, 0.14);
+
+            text-shadow:
+                0 0 12px rgba(255, 60, 60, 0.9);
+        }
+
+
+        /* =========================
+           SISU
+        ========================= */
+
+        main {
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+
+            padding: 145px 25px 80px;
+        }
+
+        .container {
+            width: min(1050px, 100%);
+        }
+
+        .header {
+            text-align: center;
+
+            margin-bottom: 35px;
+        }
+
+        .small-title {
+            color: #ffb0b0;
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 12px;
+            font-weight: 800;
+
+            letter-spacing: 3px;
+
+            text-transform: uppercase;
+
+            text-shadow:
+                0 0 15px rgba(255, 45, 45, 0.8);
+        }
+
+        h1 {
+            margin-top: 12px;
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: clamp(50px, 9vw, 105px);
+
+            line-height: 1;
+
+            font-weight: 900;
+
+            letter-spacing: 3px;
+
+            text-shadow:
+                0 0 8px white,
+                0 0 25px rgba(255, 35, 35, 1),
+                0 0 60px rgba(255, 20, 20, 0.6);
+        }
+
+        .subtitle {
+            margin-top: 14px;
+
+            color: #ffd0d0;
+
+            font-size: 18px;
+        }
+
+
+        /* =========================
+           KAARDID
+        ========================= */
+
+        .grid {
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 18px;
+        }
+
+        .card {
+            padding: 27px;
+
+            background: rgba(8, 12, 9, 0.72);
+
+            border: 1px solid rgba(255, 80, 80, 0.23);
+
+            border-radius: 20px;
+
+            backdrop-filter: blur(13px);
+
+            box-shadow:
+                0 18px 55px rgba(0,0,0,0.35);
+        }
+
+        .card h2 {
+            margin-bottom: 18px;
+
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 17px;
+
+            text-shadow:
+                0 0 12px rgba(255, 50, 50, 0.65);
+        }
+
+        .ip {
+            font-family: "Orbitron", sans-serif;
+
+            font-size: clamp(18px, 3vw, 29px);
+
+            font-weight: 800;
+
+            color: white;
+
+            word-break: break-all;
+
+            text-shadow:
+                0 0 15px rgba(255, 50, 50, 0.8);
+        }
+
+        .port {
+            margin-top: 9px;
+
+            color: #ffaaaa;
+        }
+
+        .description {
+            color: rgba(255,255,255,0.86);
+
+            line-height: 1.8;
+
+            font-size: 15px;
+        }
+
+        .badges {
+            display: flex;
+
+            gap: 10px;
+
+            flex-wrap: wrap;
+
+            margin-top: 18px;
+        }
+
+        .badge {
+            padding: 8px 12px;
+
+            border-radius: 10px;
+
+            background: rgba(255, 45, 45, 0.12);
+
+            border: 1px solid rgba(255, 80, 80, 0.20);
+
+            font-size: 12px;
+        }
+
+
+        /* =========================
+           MIDA SAAB TEHA
+        ========================= */
+
+        .wide {
+            grid-column: 1 / -1;
+        }
+
+        .features {
+            display: grid;
+
+            grid-template-columns: repeat(3, 1fr);
+
+            gap: 12px;
+        }
+
+        .feature {
+            padding: 18px;
+
+            border-radius: 14px;
+
+            background: rgba(255,255,255,0.035);
+
+            border: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .feature h3 {
+            font-family: "Orbitron", sans-serif;
+
+            font-size: 13px;
+
+            margin-bottom: 8px;
+        }
+
+        .feature p {
+            color: rgba(255,255,255,0.64);
+
+            font-size: 13px;
+
+            line-height: 1.6;
+        }
+
+
+        /* =========================
+           MOBIIL
+        ========================= */
+
+        @media (max-width: 760px) {
+
+            .navbar {
+                align-items: flex-start;
+            }
+
+            .brand span {
+                display: none;
+            }
+
+            .nav-links a {
+                padding: 7px 8px;
+                font-size: 11px;
+            }
+
+            .grid {
+                grid-template-columns: 1fr;
+            }
+
+            .wide {
+                grid-column: auto;
+            }
+
+            .features {
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- MINECRAFTI TAUST -->
+    <div class="minecraft-background"></div>
+
+    <div class="red-overlay"></div>
+
+    <div class="dark-overlay"></div>
+
+
+    <!-- =========================
+         NAVIGATSIOON
+    ========================= -->
+
+    <nav class="navbar">
+
+        <a href="index.html" class="brand">
+
+            <img
+                src="calaland-logo.png"
+                alt="Calalandi logo"
+            >
+
+            <span>CALALAND</span>
+
+        </a>
+
+
+        <div class="nav-links">
+
+            <a href="index.html">
+                Avaleht
+            </a>
+
+            <a href="minecraft.html" class="active">
+                Minecraft
+            </a>
+
+            <a href="juhtkond.html">
+                Juhtkond
+            </a>
+
+            <a href="reeglid.html">
+                Reeglid
+            </a>
+
+            <a href="uudised.html">
+                Uudised
+            </a>
+
+            <a href="syndmused.html">
+                Sündmused
+            </a>
+
+            <a href="discord.html">
+                Discord
+            </a>
+
+        </div>
+
+    </nav>
+
+
+    <!-- =========================
+         MINECRAFTI LEHT
+    ========================= -->
+
+    <main>
+
+        <div class="container">
+
+            <header class="header">
+
+                <div class="small-title">
+                    CALALANDI MINECRAFTI SERVER
+                </div>
+
+                <h1>
+                    CALALAND
+                </h1>
+
+                <p class="subtitle">
+                    Ehita. Võistle. Loo oma linn.
+                </p>
+
+            </header>
+
+
+            <div class="grid">
+
+
+                <!-- SERVERI ÜHENDUS -->
+
+                <section class="card">
+
+                    <h2>
+                        🎮 SERVERI ÜHENDUS
+                    </h2>
+
+                    <div class="ip">
+                        Calaland-uv7l.aternos.me
+                    </div>
+
+                    <div class="port">
+                        Port: <strong>41376</strong>
+                    </div>
+
+                    <div class="badges">
+
+                        <div class="badge">
+                            Java Edition
+                        </div>
+
+                        <div class="badge">
+                            Bedrock Edition
+                        </div>
+
+                    </div>
+
+                </section>
+
+
+                <!-- SERVERIST -->
+
+                <section class="card">
+
+                    <h2>
+                        ⛏️ SERVERIST
+                    </h2>
+
+                    <p class="description">
+
+                        Calalandi Minecrafti serveris saavad
+                        kõik Creative'is endale ehitada suure linna.
+
+                        <br><br>
+
+                        Lisaks toimuvad serveris erinevad
+                        võistlused ning olemas on ka
+                        <strong>serverisisene raha</strong>.
+
+                    </p>
+
+                </section>
+
+
+                <!-- MIDA SAAB TEHA -->
+
+                <section class="card wide">
+
+                    <h2>
+                        🏙️ MIDA CALALANDIS TEHA SAAB?
+                    </h2>
+
+                    <div class="features">
+
+
+                        <div class="feature">
+
+                            <h3>
+                                🏙️ LINNA EHITAMINE
+                            </h3>
+
+                            <p>
+                                Ehita Creative'is oma linn ja
+                                arenda seda just nii, nagu ise soovid.
+                            </p>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <h3>
+                                🏆 VÕISTLUSED
+                            </h3>
+
+                            <p>
+                                Osale erinevatel ehitus- ja
+                                serverisisestel võistlustel.
+                            </p>
+
+                        </div>
+
+
+                        <div class="feature">
+
+                            <h3>
+                                💰 SERVERI RAHA
+                            </h3>
+
+                            <p>
+                                Kasuta Calalandi serverisisest raha
+                                oma mänguelu rikastamiseks.
+                            </p>
+
+                        </div>
+
+
+                    </div>
+
+                </section>
+
+            </div>
+
+        </div>
+
+    </main>
+
+</body>
+</html>
