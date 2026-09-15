@@ -31,29 +31,24 @@
         ========================================= */
 
         .background-logo {
-            position: fixed;
-            inset: 0;
+    position: fixed;
+    inset: -8%;
 
-            width: 100%;
-            height: 100%;
+    width: 116%;
+    height: 116%;
 
-            background-image: url("./calaland-logo.png");
-            background-position: center;
-            background-repeat: no-repeat;
-            background-size: cover;
+    object-fit: cover;
+    object-position: center;
 
-            /* Udune taust */
-            filter: blur(14px);
+    filter: blur(14px);
 
-            /* Läbipaistvus */
-            opacity: 0.20;
+    opacity: 0.20;
 
-            /* Veidi suuremaks, et blur ei jätaks servi */
-            transform: scale(1.08);
+    transform: scale(1.05);
 
-            z-index: -3;
+    z-index: -3;
         }
-
+        
         /* Tume kiht logo peal, et kiri oleks hästi loetav */
         .dark-overlay {
             position: fixed;
@@ -401,7 +396,8 @@
 <body>
 
     <!-- PÄRIS CALALANDI LOGO TAUSTAL -->
-    <div class="background-logo"></div>
+    
+    <img src="./calaland-logo.png" class="background-logo" alt="">
 
     <!-- Tumendav kiht -->
     <div class="dark-overlay"></div>
