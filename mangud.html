@@ -1,0 +1,1934 @@
+<!DOCTYPE html>
+<html lang="et">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calaland | Mängud</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #090507;
+    color: #fff;
+    font-family: Arial, sans-serif;
+}
+
+nav {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: #14090b;
+    border-bottom: 1px solid #4d2025;
+    padding: 12px;
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+nav a {
+    color: #ccc;
+    text-decoration: none;
+    padding: 8px 11px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+nav a:hover,
+nav a.active {
+    background: #3c1116;
+    color: #fff;
+}
+
+main {
+    max-width: 1100px;
+    margin: auto;
+    padding: 45px 18px 80px;
+}
+
+h1 {
+    text-align: center;
+    font-size: 58px;
+    color: #ff4141;
+    margin: 0 0 8px;
+}
+
+h2 {
+    color: #ff6464;
+}
+
+p {
+    color: #c6c6c6;
+    line-height: 1.6;
+}
+
+.subtitle {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 20px;
+}
+
+.tab {
+    border: 1px solid #5c252b;
+    background: #16090b;
+    color: #ddd;
+    padding: 11px 14px;
+    border-radius: 9px;
+    cursor: pointer;
+}
+
+.tab.active,
+.tab:hover {
+    background: #55151d;
+    color: #fff;
+}
+
+.game {
+    display: none;
+    background: #12090b;
+    border: 1px solid #55252c;
+    border-radius: 18px;
+    padding: 28px;
+    text-align: center;
+}
+
+.game.active {
+    display: block;
+}
+
+.play {
+    background: #e62d38;
+    color: #fff;
+    border: 0;
+    border-radius: 8px;
+    padding: 12px 19px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.play:hover {
+    background: #ff3d48;
+}
+
+.play:disabled {
+    opacity: .45;
+    cursor: not-allowed;
+}
+
+.result {
+    min-height: 26px;
+    margin-top: 14px;
+    color: #ffb0b0;
+    font-weight: bold;
+}
+
+.points,
+.color-info,
+.guess-info,
+.picture-info {
+    color: #ffb0b0;
+    margin: 18px;
+}
+
+.bet-buttons {
+    margin: 15px;
+}
+
+.bet-buttons button,
+.picture-answers button,
+.question {
+    background: #1b0b0e;
+    color: #fff;
+    border: 1px solid #653038;
+    border-radius: 8px;
+    padding: 9px 13px;
+    cursor: pointer;
+}
+
+.bet-buttons button:hover,
+.picture-answers button:hover,
+.question:hover {
+    background: #341118;
+}
+
+.slots {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin: 22px 0;
+}
+
+.slot {
+    width: 90px;
+    height: 90px;
+    border: 1px solid #653038;
+    border-radius: 12px;
+    background: #1c0b0e;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 42px;
+}
+
+.timer {
+    font: 70px monospace;
+    color: #ff5555;
+    margin: 25px;
+}
+
+.bomb-grid,
+.picture-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 52px);
+    justify-content: center;
+    gap: 7px;
+    margin: 25px auto;
+}
+
+.bomb-box,
+.picture-cell {
+    width: 52px;
+    height: 52px;
+    border: 1px solid #613039;
+    border-radius: 8px;
+    background: #1a0b0e;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 22px;
+}
+
+.bomb-box:hover,
+.picture-cell:hover {
+    background: #2b1116;
+}
+
+.color-word {
+    font-size: 64px;
+    font-weight: bold;
+    margin: 25px;
+}
+
+.color-buttons {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.color-button {
+    border: 0;
+    border-radius: 8px;
+    padding: 11px 15px;
+    color: #fff;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.people-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 7px;
+    max-width: 900px;
+    margin: 22px auto;
+}
+
+.person {
+    background: #1a0b0e;
+    color: #fff;
+    border: 1px solid #603038;
+    border-radius: 8px;
+    padding: 10px;
+    cursor: pointer;
+    min-height: 70px;
+}
+
+.person.eliminated {
+    opacity: .22;
+    filter: grayscale(1);
+}
+
+.questions {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 7px;
+    max-width: 900px;
+    margin: 18px auto;
+}
+
+.question:disabled {
+    opacity: .35;
+}
+
+.select {
+    background: #16090b;
+    color: #fff;
+    border: 1px solid #603038;
+    border-radius: 8px;
+    padding: 11px;
+}
+
+.picture-task {
+    min-height: 250px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 18px auto;
+    max-width: 900px;
+}
+
+.picture-answer-row {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.big-icons {
+    font-size: 42px;
+    line-height: 1.8;
+    max-width: 850px;
+}
+
+.pattern {
+    font-size: 40px;
+}
+
+@media (max-width: 700px) {
+    .people-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+
+    .questions {
+        grid-template-columns: 1fr;
+    }
+
+    .bomb-grid,
+    .picture-grid {
+        grid-template-columns: repeat(4, 52px);
+    }
+
+    .timer {
+        font-size: 48px;
+    }
+
+    .color-word {
+        font-size: 44px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<nav>
+    <a href="index.html">Avaleht</a>
+    <a href="minecraft.html">Minecraft</a>
+    <a href="juhtkond.html">Juhtkond</a>
+    <a href="reeglid.html">Reeglid</a>
+    <a href="uudised.html">Uudised</a>
+    <a href="discord.html">Discord</a>
+    <a href="mangud.html" class="active">Mängud</a>
+</nav>
+
+<main>
+
+<h1>MÄNGUD</h1>
+<p class="subtitle">Vali mäng</p>
+
+<div class="tabs">
+    <button class="tab active" data-game="luck">🎰 Õnnekeeris</button>
+    <button class="tab" data-game="accuracy">🎯 Täpsusmäng</button>
+    <button class="tab" data-game="bomb">💣 Pommimäng</button>
+    <button class="tab" data-game="color">🎨 Värvireaktsioon</button>
+    <button class="tab" data-game="guess">🕵️ Kes see on?</button>
+    <button class="tab" data-game="picture">🧩 Pildiülesanded</button>
+</div>
+
+
+<section id="luck" class="game active">
+
+<h2>🎰 Õnnekeeris</h2>
+
+<p>Alguses on sul 1000 mängupunkti.</p>
+
+<div class="points">
+    Punktid:
+    <b id="luckPoints">1000</b>
+</div>
+
+<div class="bet-buttons">
+    <button data-bet="10">10</button>
+    <button data-bet="50">50</button>
+    <button data-bet="100">100</button>
+</div>
+
+<div>
+    Panus:
+    <b id="luckBet">10</b>
+</div>
+
+<div class="slots">
+    <div class="slot" id="slot1">🍒</div>
+    <div class="slot" id="slot2">🍋</div>
+    <div class="slot" id="slot3">🍉</div>
+</div>
+
+<button class="play" id="spin">KEERUTA</button>
+
+<div class="result" id="luckResult"></div>
+
+</section>
+
+
+<section id="accuracy" class="game">
+
+<h2>🎯 Täpsusmäng</h2>
+
+<p>
+    Peata aeg võimalikult täpselt 10.00 sekundil.
+</p>
+
+<div class="timer" id="accuracyTimer">
+    0.00
+</div>
+
+<button class="play" id="accuracyButton">
+    ALUSTA
+</button>
+
+<div class="result" id="accuracyResult"></div>
+
+</section>
+
+
+<section id="bomb" class="game">
+
+<h2>💣 Pommimäng</h2>
+
+<p>
+    Alusta 15 kastiga. Igas voorus on üks pomm
+    ja üks vähem kaste.
+</p>
+
+<div>
+    Kaste:
+    <b id="bombCount">15</b>
+</div>
+
+<div class="bomb-grid" id="bombGrid"></div>
+
+<button class="play" id="bombStart">
+    ALUSTA
+</button>
+
+<div class="result" id="bombResult"></div>
+
+</section>
+
+
+<section id="color" class="game">
+
+<h2>🎨 Värvireaktsioon</h2>
+
+<p>
+    Vali värv, mida sõna ütleb.
+    Vale vastus annab 1,5 sekundit trahvi.
+</p>
+
+<div class="color-info">
+    Aeg:
+    <b id="colorTime">30.0</b>s
+    &nbsp; | &nbsp;
+    Punktid:
+    <b id="colorScore">0</b>
+</div>
+
+<div class="color-word" id="colorWord">
+    PUNANE
+</div>
+
+<div class="color-buttons" id="colorButtons"></div>
+
+<button class="play" id="colorStart">
+    ALUSTA
+</button>
+
+<div class="result" id="colorResult"></div>
+
+</section>
+
+
+<section id="guess" class="game">
+
+<h2>🕵️ Kes see on?</h2>
+
+<p>
+    Alustad 100 punktiga.
+    Iga küsimus maksab 2 punkti.
+</p>
+
+<div class="guess-info">
+    Punktid:
+    <b id="guessScore">100</b>
+    &nbsp; | &nbsp;
+    Küsimused:
+    <b id="guessCount">0</b>
+</div>
+
+<div class="people-grid" id="peopleGrid"></div>
+
+<div class="questions" id="questionGrid"></div>
+
+<select class="select" id="guessSelect">
+    <option value="">Vali tegelane</option>
+</select>
+
+<button class="play" id="guessButton">
+    ARVA
+</button>
+
+<button class="play" id="guessNew">
+    UUS MÄNG
+</button>
+
+<div class="result" id="guessResult"></div>
+
+</section>
+
+
+<section id="picture" class="game">
+
+<h2>🧩 Pildiülesanded</h2>
+
+<p>
+    Juhuslikult valitakse 10 erinevat ülesannet.
+    Sul on 60 sekundit.
+</p>
+
+<div class="picture-info">
+
+    Aeg:
+    <b id="pictureTime">60</b>s
+
+    &nbsp; | &nbsp;
+
+    Ülesanne:
+    <b id="pictureRound">0/10</b>
+
+    &nbsp; | &nbsp;
+
+    Skoor:
+    <b id="pictureScore">0</b>
+
+</div>
+
+<div class="picture-task" id="pictureTask">
+
+    <h3>Valmis?</h3>
+
+    <p>Vajuta ALUSTA.</p>
+
+</div>
+
+<div class="picture-answer-row"
+     id="pictureAnswers"></div>
+
+<button
+    type="button"
+    class="play"
+    id="pictureStart">
+    🧩 ALUSTA
+</button>
+
+<div class="result"
+     id="pictureResult"></div>
+
+</section>
+
+</main>
+
+
+<script>
+
+/* TABID */
+
+const allTabs = document.querySelectorAll('.tab');
+const allGames = document.querySelectorAll('.game');
+
+allTabs.forEach(function(tab) {
+
+    tab.addEventListener('click', function() {
+
+        allTabs.forEach(function(t) {
+            t.classList.remove('active');
+        });
+
+        allGames.forEach(function(g) {
+            g.classList.remove('active');
+        });
+
+        tab.classList.add('active');
+
+        document
+            .getElementById(tab.dataset.game)
+            .classList.add('active');
+
+    });
+
+});
+
+
+/* ÕNNEKEERIS */
+
+let luckPoints = 1000;
+let luckBet = 10;
+
+const slotSymbols = [
+    '🍒',
+    '🍋',
+    '🍉',
+    '🍇',
+    '⭐',
+    '🔔'
+];
+
+document
+    .querySelectorAll('[data-bet]')
+    .forEach(function(btn) {
+
+        btn.addEventListener('click', function() {
+
+            luckBet = Number(btn.dataset.bet);
+
+            document
+                .getElementById('luckBet')
+                .textContent = luckBet;
+
+        });
+
+    });
+
+document
+    .getElementById('spin')
+    .addEventListener('click', function() {
+
+        if (luckPoints < luckBet) {
+
+            document
+                .getElementById('luckResult')
+                .textContent =
+                '❌ Sul pole piisavalt punkte.';
+
+            return;
+        }
+
+        luckPoints -= luckBet;
+
+        const a =
+            slotSymbols[
+                Math.floor(
+                    Math.random() *
+                    slotSymbols.length
+                )
+            ];
+
+        const b =
+            slotSymbols[
+                Math.floor(
+                    Math.random() *
+                    slotSymbols.length
+                )
+            ];
+
+        const c =
+            slotSymbols[
+                Math.floor(
+                    Math.random() *
+                    slotSymbols.length
+                )
+            ];
+
+        document.getElementById('slot1').textContent = a;
+        document.getElementById('slot2').textContent = b;
+        document.getElementById('slot3').textContent = c;
+
+        let win = 0;
+
+        if (a === b && b === c) {
+
+            win = luckBet * 5;
+
+            document
+                .getElementById('luckResult')
+                .textContent =
+                '🔥 3 SAMA! +' +
+                win +
+                ' punkti';
+
+        } else if (
+            a === b ||
+            a === c ||
+            b === c
+        ) {
+
+            win = luckBet * 2;
+
+            document
+                .getElementById('luckResult')
+                .textContent =
+                '✨ 2 SAMA! +' +
+                win +
+                ' punkti';
+
+        } else {
+
+            document
+                .getElementById('luckResult')
+                .textContent =
+                '😢 Seekord ei läinud.';
+
+        }
+
+        luckPoints += win;
+
+        document
+            .getElementById('luckPoints')
+            .textContent = luckPoints;
+
+    });
+
+
+/* TÄPSUS */
+
+let accuracyRunning = false;
+let accuracyStart = 0;
+let accuracyInterval = null;
+
+document
+    .getElementById('accuracyButton')
+    .addEventListener('click', function() {
+
+        const btn = this;
+
+        if (!accuracyRunning) {
+
+            accuracyRunning = true;
+
+            accuracyStart = performance.now();
+
+            btn.textContent = 'PEATA';
+
+            document
+                .getElementById('accuracyResult')
+                .textContent = '';
+
+            accuracyInterval =
+                setInterval(function() {
+
+                    document
+                        .getElementById('accuracyTimer')
+                        .textContent =
+                        (
+                            (performance.now() -
+                            accuracyStart) / 1000
+                        ).toFixed(2);
+
+                }, 10);
+
+        } else {
+
+            accuracyRunning = false;
+
+            clearInterval(accuracyInterval);
+
+            const elapsed =
+                (performance.now() -
+                accuracyStart) / 1000;
+
+            const diff =
+                Math.abs(elapsed - 10);
+
+            document
+                .getElementById('accuracyTimer')
+                .textContent =
+                elapsed.toFixed(3);
+
+            document
+                .getElementById('accuracyResult')
+                .textContent =
+                diff <= 0.005
+                ? '🏆 PERFEKT!'
+                : 'Mööda: ' +
+                  diff.toFixed(3) +
+                  ' s';
+
+            btn.textContent =
+                'ALUSTA UUESTI';
+
+        }
+
+    });
+
+
+/* POMM */
+
+let bombCount = 15;
+let bombIndex = -1;
+let bombRunning = false;
+
+function drawBomb() {
+
+    const grid =
+        document.getElementById('bombGrid');
+
+    grid.innerHTML = '';
+
+    document
+        .getElementById('bombCount')
+        .textContent = bombCount;
+
+    bombIndex =
+        Math.floor(
+            Math.random() *
+            bombCount
+        );
+
+    for (let i = 0; i < bombCount; i++) {
+
+        const b =
+            document.createElement('button');
+
+        b.className = 'bomb-box';
+        b.textContent = '📦';
+
+        b.addEventListener('click', function() {
+
+            if (!bombRunning) return;
+
+            if (i === bombIndex) {
+
+                b.textContent = '💣';
+
+                bombRunning = false;
+
+                document
+                    .getElementById('bombResult')
+                    .textContent =
+                    '💥 PÕMM! Mäng läbi.';
+
+                return;
+            }
+
+            b.textContent = '✅';
+
+            bombCount--;
+
+            if (bombCount === 1) {
+
+                bombRunning = false;
+
+                document
+                    .getElementById('bombCount')
+                    .textContent = '1';
+
+                grid.innerHTML =
+                    '<div class="bomb-box">💣</div>';
+
+                document
+                    .getElementById('bombResult')
+                    .textContent =
+                    '🏆 VÕIT!';
+
+                return;
+            }
+
+            drawBomb();
+
+        });
+
+        grid.appendChild(b);
+
+    }
+
+}
+
+document
+    .getElementById('bombStart')
+    .addEventListener('click', function() {
+
+        bombCount = 15;
+        bombRunning = true;
+
+        document
+            .getElementById('bombResult')
+            .textContent = '';
+
+        drawBomb();
+
+    });
+
+
+/* VÄRV */
+
+const colorChoices = [
+
+    ['PUNANE', '#ff3030'],
+    ['SININE', '#3485ff'],
+    ['ROHELINE', '#28c85b'],
+    ['KOLLANE', '#ffd331'],
+    ['LILLA', '#a35cff'],
+    ['ROOSA', '#ff4ca1']
+
+];
+
+let colorRunning = false;
+let colorPenalty = false;
+let colorTime = 30;
+let colorScore = 0;
+let colorInterval = null;
+let currentColor = '';
+
+function nextColor() {
+
+    if (!colorRunning) return;
+
+    const correct =
+        colorChoices[
+            Math.floor(
+                Math.random() *
+                colorChoices.length
+            )
+        ];
+
+    let display;
+
+    do {
+
+        display =
+            colorChoices[
+                Math.floor(
+                    Math.random() *
+                    colorChoices.length
+                )
+            ];
+
+    } while (
+        display[0] === correct[0]
+    );
+
+    currentColor = correct[0];
+
+    const word =
+        document.getElementById('colorWord');
+
+    word.textContent = correct[0];
+    word.style.color = display[1];
+
+    const area =
+        document.getElementById('colorButtons');
+
+    area.innerHTML = '';
+
+    colorChoices.forEach(function(c) {
+
+        const b =
+            document.createElement('button');
+
+        b.className = 'color-button';
+        b.textContent = c[0];
+        b.style.background = c[1];
+
+        b.addEventListener('click', function() {
+
+            if (
+                !colorRunning ||
+                colorPenalty
+            ) return;
+
+            if (c[0] === currentColor) {
+
+                colorScore++;
+
+                document
+                    .getElementById('colorScore')
+                    .textContent =
+                    colorScore;
+
+                nextColor();
+
+            } else {
+
+                colorPenalty = true;
+
+                document
+                    .getElementById('colorResult')
+                    .textContent =
+                    '❌ VALE! 1,5 s trahvi';
+
+                area
+                    .querySelectorAll('button')
+                    .forEach(function(x) {
+                        x.disabled = true;
+                    });
+
+                setTimeout(function() {
+
+                    if (colorRunning) {
+
+                        colorPenalty = false;
+
+                        document
+                            .getElementById('colorResult')
+                            .textContent = '';
+
+                        nextColor();
+
+                    }
+
+                }, 1500);
+
+            }
+
+        });
+
+        area.appendChild(b);
+
+    });
+
+}
+
+document
+    .getElementById('colorStart')
+    .addEventListener('click', function() {
+
+        clearInterval(colorInterval);
+
+        colorRunning = true;
+        colorPenalty = false;
+        colorTime = 30;
+        colorScore = 0;
+
+        document
+            .getElementById('colorTime')
+            .textContent = '30.0';
+
+        document
+            .getElementById('colorScore')
+            .textContent = '0';
+
+        document
+            .getElementById('colorResult')
+            .textContent = '';
+
+        this.disabled = true;
+        this.textContent = 'MÄNG KÄIB';
+
+        nextColor();
+
+        colorInterval =
+            setInterval(function() {
+
+                colorTime -= 0.1;
+
+                document
+                    .getElementById('colorTime')
+                    .textContent =
+                    Math.max(
+                        0,
+                        colorTime
+                    ).toFixed(1);
+
+                if (colorTime <= 0) {
+
+                    clearInterval(colorInterval);
+
+                    colorRunning = false;
+
+                    document
+                        .getElementById('colorButtons')
+                        .innerHTML = '';
+
+                    document
+                        .getElementById('colorWord')
+                        .textContent =
+                        'AEG LÄBI!';
+
+                    document
+                        .getElementById('colorWord')
+                        .style.color = '#fff';
+
+                    document
+                        .getElementById('colorResult')
+                        .textContent =
+                        'Skoor: ' +
+                        colorScore;
+
+                    const btn =
+                        document
+                            .getElementById(
+                                'colorStart'
+                            );
+
+                    btn.disabled = false;
+
+                    btn.textContent =
+                        'PROOVI UUESTI';
+
+                }
+
+            }, 100);
+
+    });
+
+
+/* KES SEE ON */
+
+const people = [
+
+    ['Ott Lepland','🎤','mees','eestlane','laulja'],
+    ['Alika','🎤','naine','eestlane','laulja'],
+    ['Stefan','🎤','mees','eestlane','laulja'],
+    ['Karl-Erik Taukar','🎤','mees','eestlane','laulja'],
+    ['Liis Lemsalu','🎤','naine','eestlane','laulja'],
+    ['Andrei Zevakin','🎧','mees','eestlane','sisulooja'],
+    ['Sidni','📱','mees','eestlane','sisulooja'],
+    ['Krispoiss','📱','mees','eestlane','sisulooja'],
+    ['Peeter Oja','🎭','mees','eestlane','näitleja'],
+    ['Mr Beast','📱','mees','välismaalane','sisulooja'],
+    ['Alar Karis','🏛️','mees','eestlane','poliitik'],
+    ['Mart Helme','🏛️','mees','eestlane','poliitik'],
+    ['Kaja Kallas','🏛️','naine','eestlane','poliitik'],
+    ['BSH','📱','naine','eestlane','sisulooja'],
+    ['Mallukas','📱','naine','eestlane','sisulooja'],
+    ['Hensugusta','📱','mees','eestlane','sisulooja'],
+    ['Maria Rannaväli','📱','naine','eestlane','sisulooja'],
+    ['Harry Potter','🪄','mees','välismaalane','fiktiivne'],
+    ['Pipi Pikksukk','🧡','naine','välismaalane','fiktiivne'],
+    ['Säm','🎤','mees','eestlane','laulja'],
+    ['Tommy Cash','🎤','mees','eestlane','laulja'],
+    ['Kristjan Jõekalda','🎤','mees','eestlane','saatejuht'],
+    ['Getter Jaani','🎤','naine','eestlane','laulja'],
+    ['Karlsson','🚁','mees','välismaalane','fiktiivne'],
+    ['Lennart Meri','🏛️','mees','eestlane','poliitik']
+
+];
+
+const questions = [
+
+    ['Kas ta on päris inimene?', p => p[4] !== 'fiktiivne'],
+    ['Kas ta on väljamõeldud?', p => p[4] === 'fiktiivne'],
+    ['Kas ta on mees?', p => p[2] === 'mees'],
+    ['Kas ta on naine?', p => p[2] === 'naine'],
+    ['Kas ta on eestlane?', p => p[3] === 'eestlane'],
+    ['Kas ta on välismaalane?', p => p[3] === 'välismaalane'],
+    ['Kas ta on laulja?', p => p[4] === 'laulja'],
+    ['Kas ta on sisulooja?', p => p[4] === 'sisulooja'],
+    ['Kas ta on näitleja?', p => p[4] === 'näitleja'],
+    ['Kas ta on poliitik?', p => p[4] === 'poliitik'],
+    ['Kas ta on saatejuht?', p => p[4] === 'saatejuht'],
+    ['Kas ta on tuntud internetist?', p => p[4] === 'sisulooja'],
+    ['Kas ta on tuntud televisioonist?', p => p[4] === 'näitleja' || p[4] === 'saatejuht'],
+    ['Kas ta on Eesti poliitik?', p => p[3] === 'eestlane' && p[4] === 'poliitik'],
+    ['Kas ta on Eesti laulja?', p => p[3] === 'eestlane' && p[4] === 'laulja'],
+    ['Kas ta on Eesti sisulooja?', p => p[3] === 'eestlane' && p[4] === 'sisulooja'],
+    ['Kas ta on mees ja laulja?', p => p[2] === 'mees' && p[4] === 'laulja'],
+    ['Kas ta on naine ja laulja?', p => p[2] === 'naine' && p[4] === 'laulja'],
+    ['Kas ta on mees ja sisulooja?', p => p[2] === 'mees' && p[4] === 'sisulooja'],
+    ['Kas ta on Harry Potter?', p => p[0] === 'Harry Potter'],
+    ['Kas ta on Pipi või Karlsson?', p => p[0] === 'Pipi Pikksukk' || p[0] === 'Karlsson'],
+    ['Kas ta on tuntud muusika kaudu?', p => p[4] === 'laulja'],
+    ['Kas ta on internetikuulsus?', p => p[4] === 'sisulooja'],
+    ['Kas ta on seotud poliitikaga?', p => p[4] === 'poliitik'],
+    ['Kas ta on meelelahutaja?', p => p[4] === 'näitleja' || p[4] === 'saatejuht']
+
+];
+
+let guessTarget = null;
+let guessScore = 100;
+let guessCount = 0;
+let guessDone = false;
+
+function startGuess() {
+
+    guessTarget =
+        people[
+            Math.floor(
+                Math.random() *
+                people.length
+            )
+        ];
+
+    guessScore = 100;
+    guessCount = 0;
+    guessDone = false;
+
+    document.getElementById('guessScore').textContent = '100';
+    document.getElementById('guessCount').textContent = '0';
+    document.getElementById('guessResult').textContent = '';
+
+    const pg =
+        document.getElementById('peopleGrid');
+
+    pg.innerHTML = '';
+
+    people.forEach(function(p) {
+
+        const b =
+            document.createElement('button');
+
+        b.className = 'person';
+        b.textContent =
+            p[1] + ' ' + p[0];
+
+        pg.appendChild(b);
+
+    });
+
+    const qg =
+        document.getElementById('questionGrid');
+
+    qg.innerHTML = '';
+
+    questions.forEach(function(q) {
+
+        const b =
+            document.createElement('button');
+
+        b.className = 'question';
+        b.textContent = q[0];
+
+        b.addEventListener('click', function() {
+
+            if (guessDone) return;
+
+            const answer =
+                q[1](guessTarget);
+
+            guessCount++;
+
+            guessScore =
+                Math.max(
+                    0,
+                    100 -
+                    guessCount * 2
+                );
+
+            document.getElementById('guessScore')
+                .textContent =
+                guessScore;
+
+            document.getElementById('guessCount')
+                .textContent =
+                guessCount;
+
+            document.getElementById('guessResult')
+                .textContent =
+                answer
+                ? '✅ JAH'
+                : '❌ EI';
+
+            people.forEach(function(p, i) {
+
+                if (q[1](p) !== answer) {
+
+                    pg.children[i]
+                        .classList
+                        .add('eliminated');
+
+                }
+
+            });
+
+            b.disabled = true;
+
+        });
+
+        qg.appendChild(b);
+
+    });
+
+    const s =
+        document.getElementById('guessSelect');
+
+    s.innerHTML =
+        '<option value="">Vali tegelane</option>';
+
+    people.forEach(function(p, i) {
+
+        const o =
+            document.createElement('option');
+
+        o.value = i;
+        o.textContent = p[0];
+
+        s.appendChild(o);
+
+    });
+
+}
+
+document
+    .getElementById('guessButton')
+    .addEventListener('click', function() {
+
+        if (guessDone) return;
+
+        const s =
+            document.getElementById('guessSelect');
+
+        if (s.value === '') {
+
+            document
+                .getElementById('guessResult')
+                .textContent =
+                'Vali tegelane.';
+
+            return;
+        }
+
+        guessDone = true;
+
+        const chosen =
+            people[
+                Number(s.value)
+            ];
+
+        if (
+            chosen[0] ===
+            guessTarget[0]
+        ) {
+
+            document
+                .getElementById('guessResult')
+                .textContent =
+                '🏆 ÕIGE! ' +
+                guessTarget[0] +
+                ' — ' +
+                guessScore +
+                ' punkti!';
+
+        } else {
+
+            document
+                .getElementById('guessScore')
+                .textContent = '0';
+
+            document
+                .getElementById('guessResult')
+                .textContent =
+                '❌ VALE! Õige vastus oli ' +
+                guessTarget[0];
+
+        }
+
+    });
+
+document
+    .getElementById('guessNew')
+    .addEventListener(
+        'click',
+        startGuess
+    );
+
+startGuess();
+
+
+/* 50 PILDIÜLESANNET */
+
+const pictureTasks = [
+
+    {type:'find',title:'Leia sinine kujund!',good:'🔵',bad:'🟢'},
+    {type:'find',title:'Leia punane kujund!',good:'🔴',bad:'🟡'},
+    {type:'find',title:'Leia kollane kujund!',good:'🟡',bad:'🔵'},
+    {type:'find',title:'Leia roheline kujund!',good:'🟢',bad:'🔴'},
+    {type:'find',title:'Leia lilla kujund!',good:'🟣',bad:'🟠'},
+    {type:'find',title:'Leia oranž kujund!',good:'🟠',bad:'🟢'},
+    {type:'find',title:'Leia täht!',good:'⭐',bad:'🔵'},
+    {type:'find',title:'Leia kuu!',good:'🌙',bad:'⭐'},
+    {type:'find',title:'Leia süda!',good:'❤️',bad:'💙'},
+    {type:'find',title:'Leia teemant!',good:'💎',bad:'⭐'},
+
+    {type:'count',title:'Mitu õuna on pildil?',icon:'🍎'},
+    {type:'count',title:'Mitu banaani on pildil?',icon:'🍌'},
+    {type:'count',title:'Mitu tähte on pildil?',icon:'⭐'},
+    {type:'count',title:'Mitu südant on pildil?',icon:'❤️'},
+    {type:'count',title:'Mitu kuud on pildil?',icon:'🌙'},
+    {type:'count',title:'Mitu teemanti on pildil?',icon:'💎'},
+    {type:'count',title:'Mitu lille on pildil?',icon:'🌸'},
+    {type:'count',title:'Mitu tuld on pildil?',icon:'🔥'},
+    {type:'count',title:'Mitu naerunägu on pildil?',icon:'😀'},
+    {type:'count',title:'Mitu krooni on pildil?',icon:'👑'},
+
+    {type:'missing',title:'Milline puuvili puudub?',items:['🍎','🍌','🍊','🍇','🍉']},
+    {type:'missing',title:'Milline värv puudub?',items:['🔴','🔵','🟢','🟡','🟣']},
+    {type:'missing',title:'Milline kujund puudub?',items:['⭐','❤️','💎','🌙','☀️']},
+    {type:'missing',title:'Milline loom puudub?',items:['🐶','🐱','🐭','🐰','🦊']},
+    {type:'missing',title:'Milline toit puudub?',items:['🍔','🍕','🍟','🌭','🌮']},
+    {type:'missing',title:'Milline jook puudub?',items:['🥤','🧃','☕','🧋','🥛']},
+    {type:'missing',title:'Milline ilm puudub?',items:['☀️','🌧️','❄️','🌪️','🌈']},
+    {type:'missing',title:'Milline sõiduk puudub?',items:['🚗','🚌','🚂','✈️','🚲']},
+    {type:'missing',title:'Milline mänguasi puudub?',items:['⚽','🏀','🎲','🧸','🪁']},
+    {type:'missing',title:'Milline loom puudub?',items:['🐼','🐸','🐵','🦁','🐯']},
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['🔴','🔵','🔴','🔵'],
+        answer:'🔴',
+        options:['🔴','🟢','🟡','🟣']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['⭐','🌙','⭐','🌙'],
+        answer:'⭐',
+        options:['⭐','❤️','💎','🔥']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['🍎','🍌','🍎','🍌'],
+        answer:'🍎',
+        options:['🍎','🍊','🍇','🍉']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['⬛','⬜','⬛','⬜'],
+        answer:'⬛',
+        options:['⬛','🔴','🟢','🔵']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['🐶','🐱','🐶','🐱'],
+        answer:'🐶',
+        options:['🐶','🐰','🦊','🐼']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['🔥','💧','🔥','💧'],
+        answer:'🔥',
+        options:['🔥','⭐','🌙','🍀']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['🟢','🟢','🔴','🟢','🟢'],
+        answer:'🔴',
+        options:['🔴','🟡','🔵','🟣']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['1️⃣','2️⃣','3️⃣','1️⃣','2️⃣'],
+        answer:'3️⃣',
+        options:['1️⃣','2️⃣','3️⃣','4️⃣']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['🍓','🍓','🍋','🍓','🍓'],
+        answer:'🍋',
+        options:['🍋','🍉','🍎','🍇']
+    },
+
+    {
+        type:'sequence',
+        title:'Mis tuleb järgmisena?',
+        sequence:['⬆️','⬇️','⬆️','⬇️'],
+        answer:'⬆️',
+        options:['⬆️','⬇️','➡️','⬅️']
+    },
+
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'🟢',odd:'🔵'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'🔴',odd:'🟡'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'⭐',odd:'💎'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'❤️',odd:'💙'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'🍎',odd:'🍊'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'🐶',odd:'🐱'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'☀️',odd:'🌙'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'🚗',odd:'🚌'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'⚽',odd:'🏀'},
+    {type:'different',title:'Leia ainuke teistsugune!',normal:'🔔',odd:'🎵'}
+
+];
+
+let pictureQueue = [];
+let pictureIndex = 0;
+let pictureScore = 0;
+let pictureSeconds = 60;
+let pictureRunning = false;
+let pictureTimer = null;
+let pictureLocked = false;
+
+function shuffle(arr) {
+    return [
+        ...arr
+    ].sort(
+        () => Math.random() - 0.5
+    );
+}
+
+function startPictureGame() {
+
+    clearInterval(pictureTimer);
+
+    pictureQueue =
+        shuffle(pictureTasks)
+        .slice(0, 10);
+
+    pictureIndex = 0;
+    pictureScore = 0;
+    pictureSeconds = 60;
+    pictureRunning = true;
+    pictureLocked = false;
+
+    document
+        .getElementById('pictureTime')
+        .textContent = '60';
+
+    document
+        .getElementById('pictureRound')
+        .textContent = '0/10';
+
+    document
+        .getElementById('pictureScore')
+        .textContent = '0';
+
+    document
+        .getElementById('pictureResult')
+        .textContent = '';
+
+    document
+        .getElementById('pictureStart')
+        .disabled = true;
+
+    showPictureTask();
+
+    pictureTimer =
+        setInterval(function() {
+
+            pictureSeconds--;
+
+            document
+                .getElementById('pictureTime')
+                .textContent =
+                pictureSeconds;
+
+            if (pictureSeconds <= 0) {
+
+                finishPicture(false);
+
+            }
+
+        }, 1000);
+
+}
+
+document
+    .getElementById('pictureStart')
+    .addEventListener(
+        'click',
+        startPictureGame
+    );
+
+function showPictureTask() {
+
+    if (!pictureRunning) return;
+
+    if (pictureIndex >= 10) {
+
+        finishPicture(true);
+
+        return;
+    }
+
+    pictureLocked = false;
+
+    const task =
+        pictureQueue[pictureIndex++];
+
+    document
+        .getElementById('pictureRound')
+        .textContent =
+        pictureIndex + '/10';
+
+    document
+        .getElementById('pictureAnswers')
+        .innerHTML = '';
+
+    document
+        .getElementById('pictureResult')
+        .textContent = '';
+
+    const area =
+        document.getElementById(
+            'pictureTask'
+        );
+
+    if (task.type === 'find') {
+
+        renderFind(task, area);
+
+    } else if (task.type === 'count') {
+
+        renderCount(task, area);
+
+    } else if (task.type === 'missing') {
+
+        renderMissing(task, area);
+
+    } else if (task.type === 'sequence') {
+
+        renderSequence(task, area);
+
+    } else {
+
+        renderDifferent(task, area);
+
+    }
+
+}
+
+function renderFind(task, area) {
+
+    area.innerHTML =
+        '<h3>' +
+        task.title +
+        '</h3>';
+
+    const grid =
+        document.createElement('div');
+
+    grid.className =
+        'picture-grid';
+
+    const correct =
+        Math.floor(
+            Math.random() * 25
+        );
+
+    for (let i = 0; i < 25; i++) {
+
+        const c =
+            document.createElement('div');
+
+        c.className =
+            'picture-cell';
+
+        c.textContent =
+            i === correct
+            ? task.good
+            : task.bad;
+
+        c.addEventListener(
+            'click',
+            () =>
+                i === correct
+                ? pictureCorrect()
+                : pictureWrong()
+        );
+
+        grid.appendChild(c);
+
+    }
+
+    area.appendChild(grid);
+
+}
+
+function renderCount(task, area) {
+
+    const answer =
+        Math.floor(
+            Math.random() * 6
+        ) + 3;
+
+    area.innerHTML =
+        '<h3>' +
+        task.title +
+        '</h3>' +
+        '<div class="big-icons">' +
+        task.icon.repeat(answer) +
+        '</div>';
+
+    shuffle([
+        answer,
+        answer - 1,
+        answer + 1,
+        answer + 2
+    ])
+    .filter(
+        n => n > 0
+    )
+    .forEach(
+        n =>
+            addPictureAnswer(
+                n,
+                n === answer
+            )
+    );
+
+}
+
+function renderMissing(task, area) {
+
+    const missing =
+        task.items[
+            Math.floor(
+                Math.random() *
+                task.items.length
+            )
+        ];
+
+    area.innerHTML =
+        '<h3>' +
+        task.title +
+        '</h3>' +
+        '<div class="big-icons">' +
+        task.items
+            .filter(
+                x => x !== missing
+            )
+            .join(' ') +
+        '</div>';
+
+    shuffle(task.items)
+        .forEach(
+            x =>
+                addPictureAnswer(
+                    x,
+                    x === missing
+                )
+        );
+
+}
+
+function renderSequence(task, area) {
+
+    area.innerHTML =
+        '<h3>' +
+        task.title +
+        '</h3>' +
+        '<div class="pattern">' +
+        task.sequence.join(' → ') +
+        ' → ❓' +
+        '</div>';
+
+    shuffle(task.options)
+        .forEach(
+            x =>
+                addPictureAnswer(
+                    x,
+                    x === task.answer
+                )
+        );
+
+}
+
+function renderDifferent(task, area) {
+
+    area.innerHTML =
+        '<h3>' +
+        task.title +
+        '</h3>';
+
+    const grid =
+        document.createElement('div');
+
+    grid.className =
+        'picture-grid';
+
+    const correct =
+        Math.floor(
+            Math.random() * 25
+        );
+
+    for (let i = 0; i < 25; i++) {
+
+        const c =
+            document.createElement('div');
+
+        c.className =
+            'picture-cell';
+
+        c.textContent =
+            i === correct
+            ? task.odd
+            : task.normal;
+
+        c.addEventListener(
+            'click',
+            () =>
+                i === correct
+                ? pictureCorrect()
+                : pictureWrong()
+        );
+
+        grid.appendChild(c);
+
+    }
+
+    area.appendChild(grid);
+
+}
+
+function addPictureAnswer(
+    value,
+    correct
+) {
+
+    const b =
+        document.createElement('button');
+
+    b.textContent = value;
+
+    b.addEventListener(
+        'click',
+        () =>
+            correct
+            ? pictureCorrect()
+            : pictureWrong()
+    );
+
+    document
+        .getElementById(
+            'pictureAnswers'
+        )
+        .appendChild(b);
+
+}
+
+function pictureCorrect() {
+
+    if (
+        !pictureRunning ||
+        pictureLocked
+    ) return;
+
+    pictureLocked = true;
+
+    pictureScore++;
+
+    document
+        .getElementById('pictureScore')
+        .textContent =
+        pictureScore;
+
+    document
+        .getElementById('pictureResult')
+        .textContent =
+        '✅ ÕIGE!';
+
+    setTimeout(
+        showPictureTask,
+        250
+    );
+
+}
+
+function pictureWrong() {
+
+    if (
+        !pictureRunning ||
+        pictureLocked
+    ) return;
+
+    document
+        .getElementById('pictureResult')
+        .textContent =
+        '❌ VALE! Proovi uuesti.';
+
+}
+
+function finishPicture(won) {
+
+    if (!pictureRunning) return;
+
+    pictureRunning = false;
+
+    clearInterval(pictureTimer);
+
+    document
+        .getElementById(
+            'pictureAnswers'
+        )
+        .innerHTML = '';
+
+    document
+        .getElementById(
+            'pictureStart'
+        )
+        .disabled = false;
+
+    if (won) {
+
+        document
+            .getElementById(
+                'pictureTask'
+            )
+            .innerHTML =
+            '<h3>🏆 VÕIT!</h3>' +
+            '<p>Kõik 10 ülesannet olid õiged.</p>';
+
+        document
+            .getElementById(
+                'pictureResult'
+            )
+            .textContent =
+            'Aega jäi ' +
+            pictureSeconds +
+            ' sekundit.';
+
+    } else {
+
+        document
+            .getElementById(
+                'pictureTask'
+            )
+            .innerHTML =
+            '<h3>⏰ AEG LÄBI!</h3>' +
+            '<p>Skoor: ' +
+            pictureScore +
+            '/10</p>';
+
+        document
+            .getElementById(
+                'pictureResult'
+            )
+            .textContent =
+            'Proovi uuesti.';
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>
